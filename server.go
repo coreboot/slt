@@ -180,6 +180,9 @@ func (s *Server) joinConnections(c1 net.Conn, c2 net.Conn) {
 		if err != nil {
 			s.Printf("Copy from %v to %v failed after %d bytes with error %v", src.RemoteAddr(), dst.RemoteAddr(), n, err)
 		}
+		if tcp, ok := dst.(*net.TCPConn); ok {
+			tcp.CloseWrite()
+		}
 	}
 
 	s.Printf("Joining connections: %v %v", c1.RemoteAddr(), c2.RemoteAddr())
